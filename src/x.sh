@@ -8,6 +8,26 @@
 # version: 2.0
 # -----------------------------------------------------------------------------
 
+# Copyright (c) 2020 Daniel Kovacs
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 
 # ------------------------------------------------
 # enable strict mode
@@ -108,15 +128,16 @@ function x_get_caller() {
 
 
 # -----------------------------------------------------------
-# x_log_to_fd()
+# x-log-to-fd()
 # -----------------------------------------------------------
 
-function x_log_to_fd() {
+function x-log-to-fd() {
+    local timestamp=$(date "+%F %T.%3N")
     local source=$(x_get_caller 2)
     local level=$1
     local message=$2
     local to_stderr=${3:-}
-    local log_line="$level\t${source}\t${message}"
+    local log_line="${timestamp}\t${level}\t${source}\t${message}"
     if [ -z $to_stderr ]; then
         echo -e "${log_line}"
     else
@@ -126,50 +147,50 @@ function x_log_to_fd() {
 
 
 # -----------------------------------------------------------
-# x_log_debug()
+# x-log-debug()
 # -----------------------------------------------------------
 
-function x_log_debug() {
+function x-log-debug() {
     if [ -z $XSH_DEBUG ]; then
         return
     fi
-    x_log_to_fd "DEBUG" "$1"
+    x-log-to-fd "DEBUG" "$1"
 }
 
 
 # -----------------------------------------------------------
-# x_log_info()
+# x-log-info()
 # -----------------------------------------------------------
 
-function x_log_info() {
-    x_log_to_fd "INFO" "$1"
+function x-log-info() {
+    x-log-to-fd "INFO" "$1"
 }
 
 
 # -----------------------------------------------------------
-# x_log_notice()
+# x-log-notice()
 # -----------------------------------------------------------
 
-function x_log_notice() {
-    x_log_to_fd "NOTICE" "$1"
+function x-log-notice() {
+    x-log-to-fd "NOTICE" "$1"
 }
 
 
 # -----------------------------------------------------------
-# x_log_warning()
+# x-log-warning()
 # -----------------------------------------------------------
 
-function x_log_warning() {
-    x_log_to_fd "WARNING" "$1" 1
+function x-log-warning() {
+    x-log-to-fd "WARNING" "$1" 1
 }
 
 
 # -----------------------------------------------------------
-# x_log_error()
+# x-log-error()
 # -----------------------------------------------------------
 
-function x_log_error() {
-    x_log_to_fd "ERROR" "$1" 1
+function x-log-error() {
+    x-log-to-fd "ERROR" "$1" 1
 }
 
 
@@ -177,8 +198,8 @@ function x_log_error() {
 # enabling command echo
 # -----------------------------------------------------------
 
-if [[ -n ${XSH_DEBUG} ]]; then
-    set -x -v
-fi
+# if [[ -n ${XSH_DEBUG} ]]; then
+#     set -x -v
+# fi
 
 
