@@ -1,5 +1,5 @@
 
-.. image:: https://gpf.readthedocs.io/en/latest/_images/gpf-logo.png
+**x.sh**
 
 ----
 
@@ -25,6 +25,7 @@ These utils makes debugging and running complex bash scripts (which nobody shoul
 but we all end up having anyway) easy and pretty.
 
 
+=============
 Installation
 =============
 
@@ -47,18 +48,27 @@ Source the file in your script to enable strict mode and call stack printing upo
     source x.sh
 
 
-
+======
 Usage
-=====
+======
+
+
+Strick mode
+^^^^^^^^^^^^^
+
+Sourcing the script will automatically enable `bash strict mode <http://redsymbol.net/articles/unofficial-bash-strict-mode>`_ using::
+
+    set -E -uo pipefail
+
+
+Strict mode means that bash scripts will fail at first error and not proceed further. Errors include any commands returning 
+non-zero exit codes outside of `if` condition blocks, and referencing un-set variables.
+
 
 Call stack
 ^^^^^^^^^^^
 
-By sourcing the script it will automatically enable `bash strict mode <http://redsymbol.net/articles/unofficial-bash-strict-mode>`_ using::
-
-    set -E -uo pipefail
-
-and install the call stack exception trap.
+Sourcing the script will automatically install the exception trap that produces python-like call stacks upon error.
 
 
 Consider the following example:
@@ -109,11 +119,10 @@ trigger an error, and the error trap in `x.sh` will print a python-like call-sta
 Logging 
 ^^^^^^^^
 
-Why logging in bash? 
+Why do we need logging in bash? Logging in bash is just as easy as calling `echo`, so why bother?
 
-Logging in bash is just as easy as calling `echo`, so why bother?
 
-The logging functions in `x.sh` will create a python-like log record, with timestamp, log level, and
+Well, these logging functions in `x.sh` will create a python-like log record, with timestamp, log level, and
 automatic inclusion of where the log came from. For example:
 
 
@@ -142,7 +151,7 @@ automatic inclusion of where the log came from. For example:
     some_other_func
 
 
-Running the test will generate the following log records.
+Running the test will generate the following output: 
 
 
 .. code-block:: bash
@@ -173,8 +182,9 @@ by setting the `XSH_DEBUG` environment variable to a non-empty value. For exampl
     2020-07-08 08:36:25.395 WARNING ./logger_test.sh:some_other_func:17 Thing might have not gone well...
 
 
+
 The `ERROR` and `WARNING` records are written to `stderr`, all other lines are written `stdout`. For
-example, redirecting `stdout` to `/dev/null` would only display us errors::
+example, redirecting `stdout` to `/dev/null` would only display us errors:
 
 
 .. code-block:: bash
